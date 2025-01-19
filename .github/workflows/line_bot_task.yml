@@ -1,12 +1,12 @@
-name: LINE Bot Scheduler
+name: LINE Bot Message Scheduler
 
 on:
+  workflow_dispatch:       # 手動実行
   schedule:
-    - cron: "0 9 * * *"  # 毎日午前9時（UTC）に実行
-  workflow_dispatch:       # 手動実行も可能にする
+    - cron: "0 9 * * *"    # 毎日午前9時に実行
 
 jobs:
-  send_line_message:
+  send_message:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,9 +22,8 @@ jobs:
       run: |
         pip install line-bot-sdk
 
-    - name: Run Python script
+    - name: Send LINE message
       env:
-        LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_Channel_ID }}
-        LINE_CHANNEL_SECRET: ${{ secrets.LINE_Channel_Secret }}
+        LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
       run: |
         python src/main.py
