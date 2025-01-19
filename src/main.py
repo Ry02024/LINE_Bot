@@ -1,14 +1,13 @@
 import os
 import random
 import google.generativeai as genai
-from linebot.v3.messaging import MessagingApi
+from linebot.v3.messaging import MessagingApi, Configuration, ApiClient
 from linebot.v3.messaging.models import TextMessage
-import traceback
 
 # 環境変数から値を取得
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
-LINE_GROUP_ID = "C63a54a7baf55702d42e417b13fe2ce09"
+LINE_GROUP_ID = os.getenv("LINE_GROUP_ID")
 
 # 必須環境変数の確認
 if not all([GEMINI_API_KEY, LINE_CHANNEL_ACCESS_TOKEN, LINE_GROUP_ID]):
@@ -58,34 +57,25 @@ def trim_to_140_chars(text):
 
 # LINEグループに投稿する
 def post_to_line(text):
-    # MessagingApiをインスタンス化
-    messaging_api = MessagingApi()
-
-    # メッセージを送信
-    message = TextMessage(text=text)
-
-    try:
-        # LINEグループにメッセージを送信
-        messaging_api.push_message(LINE_CHANNEL_ACCESS_TOKEN, LINE_GROUP_ID, [message])
-        print(f"✅ LINEグループにメッセージを投稿しました: {text}")
-    except Exception as e:
-        raise Exception(f"LINEグループへの投稿に失敗しました: {e}")
-
-def post_to_line(text):
-    # デバッグ用の出力
+    # デバッグ用
     print(f"デバッグ: LINE_CHANNEL_ACCESS_TOKEN = {LINE_CHANNEL_ACCESS_TOKEN}")
     print(f"デバッグ: LINE_GROUP_ID = {LINE_GROUP_ID}")
     print(f"デバッグ: text = {text}")
 
-    # MessagingApiをインスタンス化
-    messaging_api = MessagingApi()
+    # Configurationを用いてアクセストークンを設定
+    configuration = Configuration(access_token=LINE_CHANNEL_ACCESS_TOKEN)
+    api_client = ApiClient(configuration=configuration)
+    messaging_api = MessagingApi(api_client=api_client)
 
-    # メッセージを送信
+    # メッセージを作成
     message = TextMessage(text=text)
 
     try:
         # LINEグループにメッセージを送信
-        messaging_api.push_message(LINE_CHANNEL_ACCESS_TOKEN, LINE_GROUP_ID, [message])
+        messaging_api.push_message(
+            to=LINE_GROUP_ID,  # グループID
+            messages=[message] # メッセージ
+        )
         print(f"✅ LINEグループにメッセージを投稿しました: {text}")
     except Exception as e:
         raise Exception(f"LINEグループへの投稿に失敗しました: {e}")
@@ -93,27 +83,20 @@ def post_to_line(text):
 # メイン処理
 if __name__ == "__main__":
     try:
-        # トピックをランダムに選択
         print("🔍 トピックを選択中...")
         topic = select_random_topic()
         print(f"✅ 選択されたトピック: {topic}")
 
-        # 記事を生成
         print("🔍 記事を生成中...")
         article = generate_article(topic)
         print(f"✅ 生成された記事: {article}")
 
-        # 140字に切り詰める
         print("🔍 記事を140字に切り詰め中...")
         message_content = trim_to_140_chars(article)
         print(f"✅ 投稿する文章（140字以内）: {message_content}")
 
-        # LINEグループに投稿
         print("🔍 LINEグループにメッセージを投稿中...")
         post_to_line(message_content)
-        print("✅ LINEグループへの投稿が完了しました！")
 
     except Exception as e:
         print(f"❌ エラーが発生しました: {e}")
-        # エラーの詳細情報（スタックトレース）を出力
-        traceback.print_exc()
