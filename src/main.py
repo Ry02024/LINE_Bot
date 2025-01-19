@@ -1,5 +1,4 @@
 import os
-from linebot.v3 import WebhookClient
 from linebot.v3.messaging import MessagingApi, Configuration
 from linebot.v3.messaging.models import TextMessage
 
@@ -20,8 +19,12 @@ def send_message():
     # 送信するメッセージ
     message = TextMessage(text="これはGitHub Actionsを使ったLINE Botからのメッセージです！")
 
-    # メッセージ送信
-    messaging_api.push_message(to=GROUP_ID, messages=[message])
+    try:
+        # メッセージ送信
+        messaging_api.push_message(to=GROUP_ID, messages=[message])
+        print("メッセージが正常に送信されました！")
+    except Exception as e:
+        print(f"メッセージ送信中にエラーが発生しました: {e}")
 
 if __name__ == "__main__":
     send_message()
