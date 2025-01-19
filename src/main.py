@@ -1,20 +1,20 @@
 import os
-from linebot import LineBotApi
-from linebot.models import TextSendMessage
+from linebot.v3.messaging import MessagingApi
+from linebot.v3.messaging.models import TextMessage
 
 # LINEのチャネルアクセストークン（GitHub Secretsで設定済み）
 ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
 
-# グループID（Webhookで取得したIDを設定）
-GROUP_ID = "U139a29bf4fd93b7bf37c16a6d34dde10"  # 取得したグループIDを入力
+# グループIDを指定（Webhookで取得したIDを設定）
+GROUP_ID = "YOUR_GROUP_ID"
 
 def send_message():
     """
     指定されたLINEグループにメッセージを送信する
     """
-    line_bot_api = LineBotApi(ACCESS_TOKEN)
-    message = "これはGitHub Actionsを使ったLINE Botからのメッセージです！"
-    line_bot_api.push_message(GROUP_ID, TextSendMessage(text=message))
+    messaging_api = MessagingApi(channel_access_token=ACCESS_TOKEN)
+    message = TextMessage(text="これはGitHub Actionsを使ったLINE Botからのメッセージです！")
+    messaging_api.push_message(to=GROUP_ID, messages=[message])
 
 if __name__ == "__main__":
     send_message()
