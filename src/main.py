@@ -3,7 +3,7 @@ from linebot import LineBotApi
 from linebot.models import TextSendMessage
 
 # LINEのチャネルアクセストークン（GitHub Secretsで設定済み）
-ACCESS_TOKEN = os.getenv("LINE_CHANNEL_SECRET")
+ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
 
 # グループID（Webhookで取得したIDを設定）
 GROUP_ID = "U139a29bf4fd93b7bf37c16a6d34dde10"  # 取得したグループIDを入力
