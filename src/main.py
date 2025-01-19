@@ -9,9 +9,23 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
 LINE_GROUP_ID = "C63a54a7baf55702d42e417b13fe2ce09"  # 事前に設定したグループID
 
+# デバッグ用に各環境変数の値を出力
+print(f"GEMINI_API_KEY: {GEMINI_API_KEY}")
+print(f"LINE_CHANNEL_ACCESS_TOKEN: {LINE_CHANNEL_ACCESS_TOKEN}")
+print(f"LINE_GROUP_ID: {LINE_GROUP_ID}")
+
 # 必須環境変数の確認
+if not GEMINI_API_KEY:
+    print("❌ 環境変数 'GEMINI_API_KEY' が設定されていません。")
+if not LINE_CHANNEL_ACCESS_TOKEN:
+    print("❌ 環境変数 'LINE_CHANNEL_ACCESS_TOKEN' が設定されていません。")
+if not LINE_GROUP_ID:
+    print("❌ 環境変数 'LINE_GROUP_ID' が設定されていません。")
+
+# エラーを出す
 if not all([GEMINI_API_KEY, LINE_CHANNEL_ACCESS_TOKEN, LINE_GROUP_ID]):
     raise ValueError("必要な環境変数が設定されていません。")
+
 
 # Geminiの初期設定
 def configure_gemini(api_key):
