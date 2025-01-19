@@ -3,7 +3,7 @@ name: LINE Bot Message Scheduler
 on:
   workflow_dispatch:       # 手動実行
   schedule:
-    - cron: "*0 * * *"  # 毎10分に実行
+    - cron: "0 * * *"  # 毎10分に実行
 
 jobs:
   send_message:
