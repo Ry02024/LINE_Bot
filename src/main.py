@@ -2,7 +2,7 @@ import os
 import random
 import google.generativeai as genai
 from linebot.v3.messaging import MessagingApi, Configuration, ApiClient
-from linebot.v3.messaging.models import TextMessage
+from linebot.v3.messaging.models import TextMessage, PushMessageRequest
 
 # 環境変数から値を取得
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
@@ -57,7 +57,7 @@ def trim_to_140_chars(text):
 
 # LINEグループに投稿する
 def post_to_line(text):
-    # デバッグ用
+    # デバッグ用出力
     print(f"デバッグ: LINE_CHANNEL_ACCESS_TOKEN = {LINE_CHANNEL_ACCESS_TOKEN}")
     print(f"デバッグ: LINE_GROUP_ID = {LINE_GROUP_ID}")
     print(f"デバッグ: text = {text}")
@@ -72,10 +72,8 @@ def post_to_line(text):
 
     try:
         # LINEグループにメッセージを送信
-        messaging_api.push_message(
-            to=LINE_GROUP_ID,  # グループID
-            messages=[message] # メッセージ
-        )
+        push_message_request = PushMessageRequest(to=LINE_GROUP_ID, messages=[message])
+        messaging_api.push_message(push_message_request)
         print(f"✅ LINEグループにメッセージを投稿しました: {text}")
     except Exception as e:
         raise Exception(f"LINEグループへの投稿に失敗しました: {e}")
