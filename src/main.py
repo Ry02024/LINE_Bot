@@ -53,7 +53,7 @@ def generate_article(topic):
 
 # 140字に切り詰める
 def trim_to_140_chars(text):
-    return text[:140]
+    return text[:200]
 
 # LINEグループに投稿する
 def post_to_line(text):
