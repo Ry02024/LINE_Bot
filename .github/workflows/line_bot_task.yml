@@ -19,8 +19,8 @@ jobs:
         python-version: 3.9
 
     - name: Install dependencies
-      run: |
-        pip install line-bot-sdk
+      run: pip install -r requirements.txt
+
 
     - name: Send LINE message
       env:
