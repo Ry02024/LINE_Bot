@@ -7,7 +7,7 @@ from linebot.v3.messaging.models import TextMessage
 # 環境変数からAPIキーを取得
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
-LINE_GROUP_ID = os.getenv("LINE_GROUP_ID")  # 事前に設定したグループID
+LINE_GROUP_ID = "U139a29bf4fd93b7bf37c16a6d34dde10"  # 事前に設定したグループID
 
 # 必須環境変数の確認
 if not all([GEMINI_API_KEY, LINE_CHANNEL_ACCESS_TOKEN, LINE_GROUP_ID]):
