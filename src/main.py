@@ -1,14 +1,15 @@
 import os
 import random
 import google.generativeai as genai
-from linebot.v3.messaging import MessagingApi, TextMessage
+from linebot.v3.messaging import MessagingApi
+from linebot.v3.messaging.models import TextMessage
 
 # 環境変数から値を取得
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
 LINE_GROUP_ID = "C63a54a7baf55702d42e417b13fe2ce09"
 
-# 必須環境変数が設定されていない場合エラー
+# 必須環境変数の確認
 if not all([GEMINI_API_KEY, LINE_CHANNEL_ACCESS_TOKEN, LINE_GROUP_ID]):
     raise ValueError("必要な環境変数が設定されていません。")
 
@@ -37,7 +38,7 @@ TOPICS = [
 def select_random_topic():
     return random.choice(TOPICS)
 
-# 選択されたトピックに基づいて記事を生成
+# 記事を生成
 def generate_article(topic):
     prompt = f"""
     以下のトピックについて、100字以内で簡潔かつ具体的に丁寧語（です・ます調）で説明してください。
@@ -56,15 +57,15 @@ def trim_to_140_chars(text):
 
 # LINEグループに投稿する
 def post_to_line(text):
-    # MessagingApiをアクセストークンで初期化
-    messaging_api = MessagingApi(channel_access_token=LINE_CHANNEL_ACCESS_TOKEN)
+    # MessagingApiをインスタンス化
+    messaging_api = MessagingApi()
 
-    # LINEに送るメッセージ
+    # メッセージを送信
     message = TextMessage(text=text)
 
     try:
         # LINEグループにメッセージを送信
-        messaging_api.push_message(to=LINE_GROUP_ID, messages=[message])
+        messaging_api.push_message(LINE_CHANNEL_ACCESS_TOKEN, LINE_GROUP_ID, [message])
         print(f"✅ LINEグループにメッセージを投稿しました: {text}")
     except Exception as e:
         raise Exception(f"LINEグループへの投稿に失敗しました: {e}")
