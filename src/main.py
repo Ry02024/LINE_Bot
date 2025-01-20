@@ -1,8 +1,9 @@
-import os
-import random
-import google.generativeai as genai
+from flask import Flask, request, jsonify
 from linebot.v3.messaging import MessagingApi, Configuration, ApiClient
 from linebot.v3.messaging.models import TextMessage, PushMessageRequest
+import google.generativeai as genai
+import google.api_core.exceptions  # 追加
+import os
 
 # 環境変数から値を取得
 LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
