@@ -1,4 +1,3 @@
-from flask import Flask, request, jsonify
 from linebot.v3.messaging import MessagingApi, Configuration, ApiClient
 from linebot.v3.messaging.models import TextMessage, PushMessageRequest
 import google.generativeai as genai
