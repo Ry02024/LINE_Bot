@@ -56,9 +56,25 @@ def generate_article(topic):
     トピック: {topic}
     """
     try:
+        # トークン1でリクエスト
         response = genai.GenerativeModel(model_name="gemini-1.5-pro").generate_content(contents=[prompt])
         generated_text = response.text.strip() if response.text else "記事を生成できませんでした。"
         return generated_text
+    except google.api_core.exceptions.ResourceExhausted as e:
+        print(f"⚠️ GEMINI_API_KEY のクォータが上限に達しました: {e}")
+        # トークン2に切り替え
+        fallback_api_key = os.getenv("GEMINI_API_KEY2")
+        if not fallback_api_key:
+            raise Exception("GEMINI_API_KEY2 が設定されていません。")
+        print("🔄 GEMINI_API_KEY2 に切り替えます...")
+        genai.configure(api_key=fallback_api_key)
+        try:
+            # トークン2で再試行
+            response = genai.GenerativeModel(model_name="gemini-1.5-pro").generate_content(contents=[prompt])
+            generated_text = response.text.strip() if response.text else "記事を生成できませんでした。"
+            return generated_text
+        except Exception as e2:
+            raise Exception(f"トークン2でもGemini APIエラーが発生しました: {e2}")
     except Exception as e:
         raise Exception(f"Gemini APIエラー: {e}")
 
