@@ -5,10 +5,21 @@ from linebot.v3.messaging import MessagingApi, Configuration, ApiClient
 from linebot.v3.messaging.models import TextMessage, PushMessageRequest
 
 # 環境変数から値を取得
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
 LINE_GROUP_ID = "C63a54a7baf55702d42e417b13fe2ce09"
 
+# GEMINI_API_KEYの取得
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+# GEMINI_API_KEYがNoneの場合、GEMINI_API_KEY2を試す
+if not GEMINI_API_KEY:
+    print("GEMINI_API_KEY not found. Trying GEMINI_API_KEY2...")
+    GEMINI_API_KEY = os.getenv("GEMINI_API_KEY2")
+
+# エラー処理: GEMINI_API_KEYが最終的にNoneの場合
+if not GEMINI_API_KEY:
+    raise ValueError("GEMINI_API_KEY and GEMINI_API_KEY2 are both not set.")
+    
 # 必須環境変数の確認
 if not all([GEMINI_API_KEY, LINE_CHANNEL_ACCESS_TOKEN, LINE_GROUP_ID]):
     raise ValueError("必要な環境変数が設定されていません。")
