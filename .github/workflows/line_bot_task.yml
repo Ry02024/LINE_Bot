@@ -1,7 +1,6 @@
 name: LINE Bot Message Scheduler
 
 on:
-  workflow_dispatch:       # 手動実行
   schedule:
     - cron: '0 22 * * *'   # 日本時間 7時
     - cron: '0 0 * * *'    # 日本時間 9時
@@ -26,22 +25,22 @@ jobs:
     - name: Install dependencies
       run: pip install -r requirements.txt
 
-    - name: Debug - List all files
-      run: ls -R
-
     - name: Debug - Print environment variables
       run: |
-        echo "LINE_CHANNEL_ACCESS_TOKEN=${LINE_CHANNEL_ACCESS_TOKEN}"
-        echo "LINE_GROUP_ID=${LINE_GROUP_ID}"
-        echo "GEMINI_API_KEY=${GEMINI_API_KEY}"
+        echo "LINE_CHANNEL_ACCESS_TOKEN1=${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}"
+        echo "LINE_CHANNEL_ACCESS_TOKEN2=${{ secrets.LINE_CHANNEL_ACCESS_TOKEN2 }}"
+        echo "LINE_GROUP_ID=${{ secrets.LINE_GROUP_ID }}"
+        echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}"
       env:
         LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
+        LINE_CHANNEL_ACCESS_TOKEN2: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN2 }}
         LINE_GROUP_ID: ${{ secrets.LINE_GROUP_ID }}
         GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
     - name: Send LINE message
       env:
         LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
+        LINE_CHANNEL_ACCESS_TOKEN2: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN2 }}
         LINE_GROUP_ID: ${{ secrets.LINE_GROUP_ID }}
         GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       run: python src/main.py
