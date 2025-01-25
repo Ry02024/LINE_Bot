@@ -1,0 +1,34 @@
+name: LINE Bot Message Scheduler
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 12 * * *'  # 日本時間 21時
+
+jobs:
+  send_message:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.9
+
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+
+    - name: Debug environment variables
+      run: |
+        echo "LINE_CHANNEL_ACCESS_TOKEN1=${{ secrets.LINE_CHANNEL_ACCESS_TOKEN1 }}"
+        echo "LINE_GROUP_ID=${{ secrets.LINE_GROUP_ID }}"
+
+    - name: Run Python script
+      env:
+        LINE_CHANNEL_ACCESS_TOKEN1: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN1 }}
+        LINE_GROUP_ID: ${{ secrets.LINE_GROUP_ID }}
+        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      run: python src/main.py
