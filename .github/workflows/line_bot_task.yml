@@ -2,13 +2,6 @@ name: LINE Bot Message Scheduler
 
 on:
   workflow_dispatch:       # 手動実行のトリガーを追加
-  schedule:
-    - cron: '0 22 * * *'   # 日本時間 7時
-    - cron: '0 0 * * *'    # 日本時間 9時
-    - cron: '0 3 * * *'    # 日本時間 12時
-    - cron: '0 6 * * *'    # 日本時間 15時
-    - cron: '0 9 * * *'    # 日本時間 18時
-    - cron: '0 12 * * *'   # 日本時間 21時
 
 jobs:
   send_message:
