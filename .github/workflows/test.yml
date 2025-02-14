@@ -2,8 +2,6 @@ name: LINE Bot Message Scheduler
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '0 12 * * *'  # 日本時間 21時
 
 jobs:
   send_message:
